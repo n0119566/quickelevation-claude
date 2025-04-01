@@ -1,4 +1,11 @@
 import '@testing-library/jest-dom';
+import { afterEach, vi } from 'vitest';
+import { cleanup } from '@testing-library/react';
+
+// Automatically cleanup after each test
+afterEach(() => {
+  cleanup();
+});
 
 // Mock IntersectionObserver
 class MockIntersectionObserver {
@@ -56,3 +63,11 @@ Object.defineProperty(window, 'navigator', {
 
 // Set up environment variables
 process.env.VITE_TOMTOM_API_KEY = 'test-api-key';
+
+// Mock requestAnimationFrame and cancelAnimationFrame
+global.requestAnimationFrame = callback => {
+  setTimeout(callback, 0);
+  return 0;
+};
+
+global.cancelAnimationFrame = () => {};

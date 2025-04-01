@@ -27,10 +27,11 @@ function App() {
     });
   };
 
-  const handleCurrentLocation = (latitude: number, longitude: number) => {
+  const handleCurrentLocation = (latitude: number, longitude: number, locationName?: string) => {
     setSelectedLocation({
       latitude,
       longitude,
+      name: locationName,
     });
   };
 
@@ -47,22 +48,24 @@ function App() {
         <main className="flex-1 py-8 px-4">
           <div className="container max-w-4xl mx-auto">
             <div className="grid gap-8">
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid gap-4">
                 <div>
                   <LocationSearch onLocationSelect={handleLocationSelect} />
                 </div>
                 
-                <div className="flex flex-col gap-4">
+                <div>
                   <CurrentLocationButton onLocationDetected={handleCurrentLocation} />
-                  
-                  {selectedLocation && (
+                </div>
+                
+                {selectedLocation && (
+                  <div>
                     <ElevationDisplay
                       latitude={selectedLocation.latitude}
                       longitude={selectedLocation.longitude}
                       locationName={selectedLocation.name}
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
               
               {!selectedLocation && (

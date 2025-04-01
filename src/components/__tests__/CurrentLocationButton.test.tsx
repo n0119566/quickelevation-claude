@@ -13,6 +13,7 @@ vi.mock('../../hooks/use-toast', () => ({
 // Mock the location API
 vi.mock('../../api/location', () => ({
   getCurrentLocation: vi.fn(),
+  getLocationNameFromCoordinates: vi.fn(),
 }));
 
 describe('CurrentLocationButton', () => {
@@ -35,6 +36,9 @@ describe('CurrentLocationButton', () => {
       longitude: -74.006,
     });
     
+    // Mock the getLocationNameFromCoordinates function
+    vi.mocked(locationApi.getLocationNameFromCoordinates).mockResolvedValue('New York');
+    
     render(<CurrentLocationButton onLocationDetected={mockOnLocationDetected} />);
     
     // Click the button
@@ -42,7 +46,7 @@ describe('CurrentLocationButton', () => {
     
     // Wait for the async operation to complete
     await waitFor(() => {
-      expect(mockOnLocationDetected).toHaveBeenCalledWith(40.7128, -74.006);
+      expect(mockOnLocationDetected).toHaveBeenCalledWith(40.7128, -74.006, 'New York');
     });
   });
   
@@ -58,6 +62,27 @@ describe('CurrentLocationButton', () => {
     // Wait for the async operation to complete
     await waitFor(() => {
       expect(mockOnLocationDetected).not.toHaveBeenCalled();
+    });
+  });
+  
+  it('falls back to just coordinates if getting location name fails', async () => {
+    // Mock the getCurrentLocation function to return coordinates
+    vi.mocked(locationApi.getCurrentLocation).mockResolvedValue({
+      latitude: 40.7128,
+      longitude: -74.006,
+    });
+    
+    // Mock the getLocationNameFromCoordinates function to fail
+    vi.mocked(locationApi.getLocationNameFromCoordinates).mockRejectedValue(new Error('Failed to get location name'));
+    
+    render(<CurrentLocationButton onLocationDetected={mockOnLocationDetected} />);
+    
+    // Click the button
+    fireEvent.click(screen.getByRole('button', { name: /use current location/i }));
+    
+    // Wait for the async operation to complete
+    await waitFor(() => {
+      expect(mockOnLocationDetected).toHaveBeenCalledWith(40.7128, -74.006);
     });
   });
 });

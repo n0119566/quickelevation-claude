@@ -2,6 +2,7 @@ import axios from "axios";
 
 const OPEN_ELEVATION_API = "https://api.open-elevation.com/api/v1/lookup";
 const TOMTOM_API = "https://api.tomtom.com/search/2/search";
+const TOMTOM_REVERSE_API = "https://api.tomtom.com/search/2/reverseGeocode";
 const TOMTOM_API_KEY = import.meta.env.VITE_TOMTOM_API_KEY;
 
 export interface Coordinates {
@@ -39,6 +40,44 @@ export const getCurrentLocation = (): Promise<Coordinates> => {
       }
     );
   });
+};
+
+// Get location name from coordinates using TomTom reverse geocoding
+export const getLocationNameFromCoordinates = async (coordinates: Coordinates): Promise<string> => {
+  try {
+    const { latitude, longitude } = coordinates;
+    const response = await axios.get(
+      `${TOMTOM_REVERSE_API}/${latitude},${longitude}.json`,
+      {
+        params: {
+          key: TOMTOM_API_KEY,
+        },
+      }
+    );
+
+    if (response.status !== 200 || !response.data.addresses || response.data.addresses.length === 0) {
+      throw new Error("Failed to get location name");
+    }
+
+    const address = response.data.addresses[0].address;
+    
+    // Create a location string that includes city and state when available
+    const city = address.municipality || address.localName || '';
+    const state = address.countrySubdivision || '';
+    
+    if (city && state) {
+      return `${city}, ${state}`;
+    } else if (city) {
+      return city;
+    } else if (state) {
+      return state;
+    } else {
+      return "Unknown Location";
+    }
+  } catch (error) {
+    console.error("Error getting location name:", error);
+    throw error;
+  }
 };
 
 // Search for location using TomTom API

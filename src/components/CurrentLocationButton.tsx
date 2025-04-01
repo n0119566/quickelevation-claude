@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Locate, Loader2 } from "lucide-react";
-import { getCurrentLocation } from "../api/location";
+import { getCurrentLocation, getLocationNameFromCoordinates } from "../api/location";
 import { useToast } from "../hooks/use-toast";
 
 interface CurrentLocationButtonProps {
-  onLocationDetected: (latitude: number, longitude: number) => void;
+  onLocationDetected: (latitude: number, longitude: number, locationName?: string) => void;
 }
 
 export function CurrentLocationButton({
@@ -18,7 +18,17 @@ export function CurrentLocationButton({
     setIsLoading(true);
     try {
       const coords = await getCurrentLocation();
-      onLocationDetected(coords.latitude, coords.longitude);
+      
+      try {
+        // Get location name from coordinates
+        const locationName = await getLocationNameFromCoordinates(coords);
+        onLocationDetected(coords.latitude, coords.longitude, locationName);
+      } catch (locationNameError) {
+        // If getting location name fails, proceed with just coordinates
+        console.error("Error getting location name:", locationNameError);
+        onLocationDetected(coords.latitude, coords.longitude);
+      }
+      
       toast({
         title: "Current location detected",
         description: "Fetching elevation data...",

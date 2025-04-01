@@ -62,10 +62,10 @@ export function ElevationDisplay({
               <div className="grid gap-1">
                 <h3 className="font-medium">Elevation</h3>
                 <p className="text-2xl font-bold">
-                  {data.elevation.toFixed(1)} meters
+                  {(data.elevation * 3.28084).toFixed(1)} feet
                 </p>
                 <p className="text-md">
-                  {(data.elevation * 3.28084).toFixed(1)} feet
+                  {data.elevation.toFixed(1)} meters
                 </p>
               </div>
             </>

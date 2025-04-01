@@ -46,7 +46,7 @@ export function LocationSearch({ onLocationSelect }: LocationSearchProps) {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full card-enhanced">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Search className="h-5 w-5" />
@@ -83,7 +83,7 @@ export function LocationSearch({ onLocationSelect }: LocationSearchProps) {
           {locations && locations.length > 0 && (
             <div className="grid gap-2">
               <h3 className="text-sm font-medium">Results</h3>
-              <ul className="space-y-1 max-h-40 overflow-auto rounded-md border p-2">
+              <ul className="space-y-1 max-h-40 overflow-auto rounded-md border p-2 card-enhanced">
                 {locations.map((location, index) => (
                   <li key={index}>
                     <button

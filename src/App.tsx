@@ -7,6 +7,7 @@ import { LocationSearch } from "./components/LocationSearch";
 import { CurrentLocationButton } from "./components/CurrentLocationButton";
 import { LocationResult } from "./api/location";
 import { Toaster } from "./components/ui/toaster";
+import { ThemeToggle } from "./components/ui/theme-toggle";
 import { Mountain } from "lucide-react";
 
 // Create a client
@@ -39,9 +40,14 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen flex flex-col">
         <header className="py-6 px-4 border-b bg-background">
-          <div className="container max-w-4xl mx-auto flex items-center">
-            <Mountain className="h-6 w-6 mr-2" />
-            <h1 className="text-2xl font-bold">QuickElevation</h1>
+          <div className="container max-w-4xl mx-auto flex items-center justify-between">
+            <div className="flex items-center">
+              <Mountain className="h-6 w-6 mr-2" />
+              <h1 className="text-2xl font-bold">QuickElevation</h1>
+            </div>
+            <div>
+              <ThemeToggle />
+            </div>
           </div>
         </header>
         

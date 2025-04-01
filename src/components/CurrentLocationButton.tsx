@@ -50,7 +50,7 @@ export function CurrentLocationButton({
       variant="outline"
       onClick={handleGetCurrentLocation}
       disabled={isLoading}
-      className="w-full"
+      className="w-full card-enhanced"
     >
       {isLoading ? (
         <Loader2 className="h-4 w-4 mr-2 animate-spin" />

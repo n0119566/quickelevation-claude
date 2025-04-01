@@ -25,7 +25,7 @@ export function ElevationDisplay({
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full card-enhanced">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Mountain className="h-5 w-5" />
